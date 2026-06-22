@@ -3,6 +3,8 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
+const authRoutes = require("./routes/auth.routes");
+
 const app = express();
 
 app.use(helmet());
@@ -11,7 +13,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
@@ -24,8 +26,10 @@ app.use(
       success: false,
       message: "Too many requests. Please try again later.",
     },
-  })
+  }),
 );
+
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
